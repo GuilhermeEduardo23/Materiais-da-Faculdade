@@ -1,0 +1,126 @@
+CREATE TABLE ENFERMIDADE(
+	cod_enf int primary key,
+	descricao varchar(40) not null
+);
+
+CREATE TABLE QUARTOS(
+	cod_quart int primary key,
+	numero int not null,
+	andar int not null
+);
+
+CREATE TABLE MEDICOS(
+	cod_medico int primary key,
+	nome varchar(40) not null,
+	sobrenome varchar(60) not null,
+	endereco varchar(100),
+	genero varchar(1),
+	numero_crm varchar(20) not null,
+	especialidade varchar(60) not null,
+	salario numeric(9,2) not null
+);
+
+CREATE TABLE PACIENTE(
+	cod_paciente int primary key,
+	nome varchar(60),
+	sobrenome varchar(60) not null,
+	endereco varchar(100),
+	genero varchar(1),
+	data_nasc date,
+	cod_quart int references QUARTOS (cod_quart),
+	cod_medico int references MEDICOS (cod_medico)
+);
+
+CREATE TABLE ENFERMIDADE_PACIENTE(
+	cod_paciente int references PACIENTE (cod_paciente),
+	cod_enf int references ENFERMIDADE (cod_enf),
+	data_entrada date
+);
+
+select * from ENFERMIDADE
+select * from QUARTOS
+select * from MEDICOS
+select * from PACIENTE
+select * from ENFERMIDADE_PACIENTE
+
+INSERT INTO ENFERMIDADE (cod_enf, descricao)
+VALUES(1, 'Asma'),
+(2, 'Diabetes'),
+(3, 'Rinite Alérgica'),
+(4, 'Pneumonia'),
+(5, 'Tuberculose');
+
+select * from ENFERMIDADE
+
+INSERT INTO QUARTOS (cod_quart, numero, andar)
+VALUES(100, 01, 1),
+(101, 02, 1),
+(102, 03, 1),
+(103, 04, 1),
+(104, 05, 1),
+(105, 06, 2),
+(106, 07, 2),
+(107, 08, 2),
+(108, 09, 2),
+(109, 10, 2);
+
+select * from QUARTOS
+
+INSERT INTO MEDICOS (cod_medico, nome, sobrenome, endereco, genero, numero_crm, especialidade, salario)
+VALUES(10, 'Emilly', 'Rodrigues Cardoso', 'Avenida Trindade', 'F', 199719, 'Otorrinolaringologista', 7975.02), --Asma e Rinite Alérgica
+(11, 'Rondinele', 'Barbosa Santos', 'Rua Guarani', 'M', 198828, 'Endocrinologista', 8004.30), --Diabetes
+(12, 'Alex', 'Rodrigues', 'Avenida Tupaciguara', 'M', 199125, 'Pneumologista', 2400.00), --Pneumonia
+(13, 'Guilherme', 'Eduardo Rodrigues da Silva', 'Rua 25', 'M', 199818, 'Otorrinolaringologista', 7975.02), --Asma e Rinite Alérgica
+(14, 'Rafael', 'dos Santos Vieira', 'Avenida A13', 'M', 199025, 'Pneumologista', 2400.00); --Tuberculose
+
+select * from MEDICOS
+
+INSERT INTO PACIENTE (cod_paciente, nome, sobrenome, endereco, genero, data_nasc, cod_quart, cod_medico)
+VALUES(20, 'João', 'Alves', 'Rua 1', 'M', '01/01/1994', 100, 10),
+(21, 'Maria', 'da Silva', 'Rua 2', 'F', '12/05/2001', 101, 10),
+(22, 'Carlos', 'Siqueira', 'Rua 3', 'M', '21/06/1988', 109, 14),
+(23, 'Sílvia', 'Rodrigues', 'Rua 4', 'F', '19/12/2000', 105, 12),
+(24, 'Marcos', 'Fernandes', 'Rua 5', 'M', '04/08/2013', 105, 12),
+(25, 'Diogo', 'Fonseca', 'Rua 6', 'M', '25/10/1996', 107, 13),
+(26, 'Flávia', 'Oliveira', 'Rua 7', 'F', '09/02/2002', 109, 14),
+(27, 'Marcia', 'Santos', 'Rua 8', 'F', '10/04/1998', 106, 13),
+(28, 'Felipe', 'Cardoso', 'Rua 9', 'M', '29/11/1995', 106, 13),
+(29, 'Antônio', 'Mendes', 'Rua 10', 'M', '12/10/1994', 104, 11); 
+
+select * from PACIENTE
+
+INSERT INTO ENFERMIDADE_PACIENTE (cod_paciente, cod_enf, data_entrada)
+VALUES(20, 1, '30/01/2015'),
+(21, 5, '14/02/2015'),
+(22, 4, '10/03/2015'),
+(23, 2, '24/04/2015'),
+(24, 1, '01/05/2005'),
+(25, 3, '15/06/2015'),
+(26, 5, '31/07/2015'),
+(27, 4, '17/08/2015'),
+(28, 2, '20/09/2015'),
+(29, 3, '29/10/2015');
+
+select * from ENFERMIDADE_PACIENTE 
+
+select cod_medico, nome, sobrenome, numero_crm, especialidade from MEDICOS --a)
+
+select cod_medico, nome, sobrenome, numero_crm from MEDICOS order by nome --b)
+
+select nome, sobrenome, endereco from PACIENTE where genero='M' --c)
+
+select nome, sobrenome from PACIENTE where cod_medico = 13 --d)
+
+select nome, sobrenome, data_nasc from PACIENTE order by data_nasc desc --e)
+
+--f)
+
+select cod_quart, numero, andar from QUARTOS where andar=1 --g)
+
+select avg (salario) from MEDICOS --h)
+
+select count (especialidade) from MEDICOS --i)
+
+select p.nome, p.sobrenome, m.nome, m.sobrenome, q.numero
+from PACIENTE p, MEDICOS m, QUARTOS q, ENFERMIDADE e, ENFERMIDADE_PACIENTE ep
+where e.cod_enf=ep.cod_enf and e.descricao='Asma' --j)

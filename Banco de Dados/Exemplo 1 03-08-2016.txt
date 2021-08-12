@@ -1,0 +1,70 @@
+CREATE TABLE CLIENTES
+(
+	codc int primary key,
+	nome varchar(120) not null,
+	cpf char(12) not null unique,
+	data_nasc date,
+	genero char(1) not null,
+	salario numeric(9,2) not null,
+	check (genero in ('M','F')),
+	check (salario > 0)
+);
+
+drop table CLIENTES; --serve para excluir uma tabela--
+
+CREATE TABLE DVD
+(
+	codd int primary key,
+	titulo varchar(120) not null,
+	genero varchar(30) not null,
+	duracao time
+);
+
+CREATE TABLE ALUGUEIS
+(
+	codalugue int primary key,
+	dataalugue date not null,
+	devolvido char(3) not null default('não'),
+	codc int references CLIENTES(codc) not null,
+	codd int references DVD(codd) not null,
+	check (devolvido in ('não','sim'))
+);
+
+
+INSERT INTO CLIENTES (codc, nome, cpf, data_nasc, genero, salario)
+VALUES (1, 'Maria', '123456789012', '22/08/1985', 'F', 999.99);
+
+SELECT * FROM CLIENTES ORDER BY codc DESC;
+
+INSERT INTO CLIENTES
+VALUES (2, 'João da Silva', '234567890123', '01/01/1980', 'M', 999.99),
+       (3, 'Maria Borges', '345678901234', '31/12/1980', 'F', 1200.00);
+
+UPDATE CLIENTES SET salario = 5489.32 where nome = 'João da Silva';
+
+
+INSERT INTO DVD
+VALUES(1, 'Batman v Superman', 'Ação/Aventura', '2:30:00'),
+      (2, 'Hobbit 1', 'Aventura/Fantasia', '2:15:00'),
+      (3, 'Avengers 2', 'Ação/Aventura', '1:45:00');
+
+SELECT * FROM DVD;
+
+INSERT INTO ALUGUEIS (codalugue, dataalugue, codc, codd)
+VALUES(1, '03/08/2016', 1, 3),
+      (2, '03/08/2016', 2, 2);
+
+SELECT * FROM ALUGUEIS;
+
+SELECT A.dataalugue as "Data Aluguel",
+D.titulo as "Filme",
+C.nome as "Cliente",
+A.devolvido as "Status"
+FROM ALUGUEIS A, DVD D, CLIENTES C
+WHERE A.codc = C.codc and A.codd = D.codd;
+
+
+UPDATE ALUGUEIS SET devolvido = 'sim'
+where codalugue = 1;
+
+DELETE FROM DVD WHERE titulo = 'Avengers 2';

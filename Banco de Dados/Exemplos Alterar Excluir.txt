@@ -1,0 +1,99 @@
+CREATE TABLE PRODUTOS (
+	id_prod int primary key,
+	descricao varchar(120) not null,
+	qtd int not null,
+	valor_limite numeric(9,2) not null,
+	CHECK (qtd >=0)
+); 
+
+
+	select * from PRODUTOS
+	
+--Altera nome da tabela
+ALTER TABLE PRODUTO RENAME TO PRODUTOS;
+
+--Altera nome da coluna
+ALTER TABLE PRODUTOS RENAME qtd TO qtde;
+
+--Inclui uma coluna
+ALTER TABLE PRODUTOS ADD cor varchar(30) not null;
+
+--Excluir uma coluna
+ALTER TABLE PRODUTOS DROP cor;
+
+--Alterar o tipo da coluna
+ALTER TABLE PRODUTOS ALTER cor TYPE char(30);
+
+--Excluir tabela
+DROP TABLE PRODUTOS;
+
+--Limpar a tabela para uso
+TRUNCATE TABLE PRODUTOS;
+
+--Criar Sequência
+CREATE SEQUENCE SQ_CLI INCREMENT 1 START 1;
+
+--Tabela Cliente
+CREATE TABLE CLIENTES (
+	id_cli int primary key DEFAULT NEXTVAL('sq_cli'),
+	nome varchar(120) not null
+);
+
+--Outra Maneira de criar Sequência
+CREATE TABLE VENDAS(
+	id_venda serial primary key,
+	data_venda date not null,
+	id_cli int references CLIENTES
+);
+
+CREATE TABLE ITENS_VENDAS(
+	id_iv serial primary key,
+	id_venda int references VENDAS not null,
+	id_prod int references PRODUTOS not null,
+	qtd int not null,
+	valor_total numeric(9,2) not null
+);
+
+--Inserir Registros
+INSERT INTO PRODUTOS(id_prod, descricao, qtd, valor_limite)
+VALUES(2, 'SABÃO EM PÓ OMO', 85, 8.50),
+(3, 'DETERGENTE LÍQUIDO YPÊ', 120, 1.50),
+(4, 'BOMBRIL', 68, 1.25),
+(5, 'BOLACHA MAIZENA', 67, 2.00),
+(6, 'AMACIANTE YPÊ', 50, 3.00),
+(7, 'DESINFETANTE YPÊ', 69, 2.45),
+(8, 'SABÃO EM PÓ TIXAN', 37, 5.60),
+(9, 'BOLACHA BONO', 87, 2.30),
+(10, 'SHAMPOO PANTENE', 60, 5.25);
+
+SELECT * FROM PRODUTOS; 
+
+INSERT INTO CLIENTES(nome)
+VALUES('Maria'),
+('Carlos'),
+('Ana'),
+('Marcelo');
+
+SELECT * FROM CLIENTES;
+
+INSERT INTO VENDAS(id_venda, data_venda, id_cli)
+VALUES(10, '10/08/2016', 1),
+(20, '11/08/2016', 2),
+(30, '12/08/2016', 3),
+(40, '13/08/2016', 4),
+(50, '14/08/2016', 5);
+
+SELECT * FROM VENDAS;
+
+INSERT INTO ITENS_VENDAS(id_iv, id_venda, id_prod, qtd, valor_total)
+VALUES(11, 20, 5, 4, 8.00),
+(12, 30, 6, 2, 6.00),
+(13, 40, 2, 3, 17.00),
+(14, 50, 10, 1, 5.25);
+
+SELECT * FROM ITENS_VENDAS;
+
+TRUNCATE TABLE CLIENTES CASCADE;
+
+--Resetar Sequência
+ALTER SEQUENCE SQ_CLI RESTART WITH 1;

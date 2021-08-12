@@ -1,0 +1,9 @@
+Esboçar um algoritmo (não precisa ser implementado) que receba uma matriz de 2 linhas e 8 colunas, linha 1 representando a linha onde a rainha está posicionada e linha 2 representando a coluna onde uma rainha está posicionada.
+
+Com base nesse vetor, sem usar nenhuma outra estrutura de dados, criar um algoritmo que encontre quantos choques existem entre as rainhas dessa matriz.
+
+Usar a seguinte matriz no exemplo:
+
+4 7 4 5 2 1 8 3
+
+1 2 3 4 5 6 7 8

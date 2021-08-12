@@ -1,0 +1,61 @@
+CREATE TABLE AUTOR(
+	cod_autor int primary key,
+	nome varchar(120) not null,
+	dt_nasc date not null
+);
+
+CREATE TABLE EDITORA(
+	cod_editora int primary key,
+	nome varchar(120) not null,
+	cnpj varchar(18) not null,
+	endereco varchar(140) not null
+);
+
+CREATE TABLE LIVRO(
+	cod_livro int primary key,
+	nome varchar(120) not null,
+	isbn varchar(40) not null unique,
+	cod_autor int references AUTOR (cod_autor),
+	cod_editora int references EDITORA (cod_editora),
+	valor numeric(9,2)
+);
+
+
+CREATE TABLE CLIENTE(
+	cod_cli int primary key,
+	nome varchar(100) not null,
+	dt_nasc date not null,
+	genero varchar(1) not null
+);
+
+CREATE TABLE VENDA(
+	cod_venda int primary key,
+	dt_venda date not null,
+	cod_livro int references LIVRO (cod_livro),
+	qtd int not null,
+	cod_cli int references CLIENTE (cod_cli)
+);
+
+select * from AUTOR
+select * from EDITORA
+select * from LIVRO
+select * from CLIENTE
+select * from VENDA
+
+INSERT INTO AUTOR(cod_autor, nome, dt_nasc)
+VALUES(1, 'Albert Camus', '05/08/1913'),
+(2, 'Barbara Bretton', '15/05/1950'),
+(3, 'Anna Elliott', '20/01/1945'),
+(4, 'Ben Sherwood', '16/06/1969'),
+(5, 'Max brooks', '01/06/1981');
+
+INSERT INTO EDITORA(cod_editora, nome, cnpj, endereco)
+VALUES(200, 'Abril Educação', '39.752.873/0005-90', 'Avenida A3'),
+(300, 'Saraiva', '10.612.738/0001-63', 'Avenida João Naves de Ávila, nº1331, Bairro Santa Mônica, Uberlândia-MG'),
+(400, 'Editora FTD', '12.345.678/9123-45', 'Rua Francisco Sales, nº 1065, Bairro Rezende Junqueira, Uberlândia-MG');
+
+INSERT INTO LIVRO(cod_livro, nome, isbn, cod_autor, cod_editora, valor)
+VALUES(140, 'O Iluminado', '978-04-511-1967-4', 1, 300, 49.90),
+(141, 'O Apanhador de Sonhos', '978-85-390-0465-2', 1, 300, 32.99),
+(142, 'Não Conte a Ninguém', '978-27-144-4296-3', 3, 200, 34.90),
+(143, 'And Then There Were None', '978-15-727-0250-9', 5, 
